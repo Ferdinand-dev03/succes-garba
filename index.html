@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Succès Garba : le garba de Bouaké, préparé chaque matin</title>
+  <meta name="description" content="Concept de site pour Succès Garba, Quartier Municipal à Bouaké : attiéké, poisson frit, piment frais. Commande sur WhatsApp.">
+  <meta name="theme-color" content="#15110e">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <a class="skip" href="#etapes">Aller au contenu</a>
+
+  <!-- ═══ BARRE DU HAUT : sombre, arrondie, flottante (comme Balans) ═══ -->
+  <header class="bar">
+    <a class="logo" href="#haut" aria-label="Succès Garba, retour en haut">Succès <em>Garba</em></a>
+    <nav class="bar-nav" aria-label="Navigation principale">
+      <a href="#etapes">Le plat</a>
+      <a href="#ou">Nous trouver</a>
+    </nav>
+    <a class="btn btn-piment btn-sm" href="https://wa.me/2250576548868?text=Bonjour%20Succ%C3%A8s%20Garba%2C%20je%20voudrais%20commander%20un%20garba." target="_blank" rel="noopener">Commander</a>
+  </header>
+
+  <main id="haut">
+
+    <!-- ═══ 1. ACCUEIL VIDÉO SOMBRE : l'effet « rideau » (A3) ═══
+         Première chose qu'on voit : la vidéo du garba, collée en haut de l'écran.
+         Elle reste affichée un écran, puis la section des étapes glisse PAR-DESSUS.
+         Tout est fait en CSS (position: sticky), voir styles.css.
+         L'écran partagé « Le garba de Bouaké » a été retiré le 2026-11-05. -->
+    <section class="manifesto" id="manifeste" aria-labelledby="manifesto-title">
+      <div class="manifesto-sticky">
+        <video class="manifesto-bg" src="images/garba.mp4" poster="images/split-gauche.jpg" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+        <div class="manifesto-inner">
+          <span class="monogram" aria-hidden="true">SG</span>
+          <p class="label">Quartier Municipal, Bouaké</p>
+          <h1 id="manifesto-title" class="manifesto-title">Le <strong>garba</strong> <em>comme à la maison</em></h1>
+          <hr>
+          <a class="btn btn-outline" href="#etapes">Voir comment on le prépare</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 3. L'ASSIETTE EN SIX ÉTAPES (A2) ═══
+         Comme chez Balans : le titre et les onglets restent fixés en haut,
+         l'assiette reste fixée à gauche, et le texte de droite défile librement.
+         L'arc orange avance avec le défilement, du point 1 (à droite, 3 h)
+         au point 6, dans le sens des aiguilles d'une montre.
+         Sans JavaScript : tout reste lisible, seul l'arc ne bouge pas. -->
+    <section class="steps" id="etapes" aria-labelledby="steps-title">
+      <header class="steps-head">
+        <h2 id="steps-title">un bon <strong>garba</strong>, <em>en six étapes</em></h2>
+        <p class="label">Comment on le prépare</p>
+        <nav class="steps-tabs" aria-label="Les six étapes">
+          <a href="#etape-1" class="is-active">1 | L’attiéké</a>
+          <a href="#etape-2">2 | Le poisson</a>
+          <a href="#etape-3">3 | Le piment</a>
+          <a href="#etape-4">4 | Oignon, tomate</a>
+          <a href="#etape-5">5 | L’assaisonnement</a>
+          <a href="#etape-6">6 | Servi chaud</a>
+        </nav>
+      </header>
+
+      <div class="steps-body">
+
+        <!-- L'assiette et son cercle : 6 points tous les 60°, en partant de la DROITE (3 h),
+             sens des aiguilles d'une montre. Coordonnées : 50 + 48 × cos(angle), 50 + 48 × sin(angle). -->
+        <div class="plate-col">
+          <figure class="plate">
+            <img src="images/assiette-pub.webp" alt="Le plat de garba de Succès Garba, vu de dessus : attiéké, poisson frit, œufs, oignon et piment" width="800" height="800" loading="lazy" decoding="async">
+            <svg class="plate-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="ring-track" cx="50" cy="50" r="48" />
+              <circle class="ring-progress" cx="50" cy="50" r="48" pathLength="1" />
+              <g class="ring-dots">
+                <g class="is-active"><circle cx="98" cy="50"    /><text x="98" y="50">1</text></g>
+                <g><circle cx="74" cy="91.57" /><text x="74" y="91.57">2</text></g>
+                <g><circle cx="26" cy="91.57" /><text x="26" y="91.57">3</text></g>
+                <g><circle cx="2"  cy="50"    /><text x="2" y="50">4</text></g>
+                <g><circle cx="26" cy="8.43"  /><text x="26" y="8.43">5</text></g>
+                <g><circle cx="74" cy="8.43"  /><text x="74" y="8.43">6</text></g>
+              </g>
+            </svg>
+          </figure>
+        </div>
+
+        <ol class="steps-list">
+          <li class="step" id="etape-1">
+            <p class="label">Étape 1</p>
+            <h3>L’attiéké</h3>
+            <p>La semoule de manioc, servie tiède et légère. C’est la base de tout.</p>
+            <img src="images/etape-1-attieke.jpg" alt="Attiéké en Côte d’Ivoire" width="720" height="540" loading="lazy" decoding="async">
+          </li>
+          <li class="step" id="etape-2">
+            <p class="label">Étape 2</p>
+            <h3>Le poisson frit</h3>
+            <p>Du thon frit, croustillant dehors et fondant dedans.</p>
+            <img src="images/etape-2-poisson.jpg" alt="Morceaux de thon frits" width="720" height="540" loading="lazy" decoding="async">
+          </li>
+          <li class="step" id="etape-3">
+            <p class="label">Étape 3</p>
+            <h3>Le piment</h3>
+            <p>Frais et haché, il donne au garba son caractère. À doser selon votre courage.</p>
+            <img src="images/etape-3-piment.jpg" alt="Piment, oignon et tomate hachés dans une bassine" width="720" height="540" loading="lazy" decoding="async">
+          </li>
+          <li class="step" id="etape-4">
+            <p class="label">Étape 4</p>
+            <h3>L’oignon et la tomate</h3>
+            <p>Coupés à la minute, pour le croquant et la fraîcheur.</p>
+            <img src="images/etape-4-oignon-tomate.jpg" alt="Oignon, tomate et piment coupés en dés" width="720" height="540" loading="lazy" decoding="async">
+          </li>
+          <li class="step" id="etape-5">
+            <p class="label">Étape 5</p>
+            <h3>L’assaisonnement</h3>
+            <p>Un filet d’huile de friture bien chaude et une pincée de sel : tout le secret du goût.</p>
+            <img src="images/etape-5-assaisonnement.jpg" alt="Poisson frit, oignon et piment dans une assiette" width="720" height="540" loading="lazy" decoding="async">
+          </li>
+          <li class="step" id="etape-6">
+            <p class="label">Étape 6</p>
+            <h3>Servi chaud</h3>
+            <p>Tout se rejoint dans l’assiette. Il ne reste plus qu’à manger.</p>
+            <img src="images/etape-6-servi.jpg" alt="Un plat de garba de Succès Garba, prêt à être mangé" width="486" height="364" loading="lazy" decoding="async">
+          </li>
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ═══ 4. OÙ NOUS TROUVER (animation A4, séance 3) ═══ -->
+    <section class="where" id="ou" aria-labelledby="where-title">
+      <h2 id="where-title">Où nous <em>trouver</em></h2>
+      <p class="where-address">Quartier Municipal, après la Maison Blanche, non loin de la grande école Le Campus, Bouaké.</p>
+      <dl class="facts">
+        <div><dt>Horaires</dt><dd><span class="tbc">à confirmer</span></dd></div>
+        <div><dt>Le plat</dt><dd><span class="tbc">prix à confirmer</span></dd></div>
+        <div><dt>Téléphone</dt><dd><a href="tel:+2250576548868">05 76 54 88 68</a></dd></div>
+      </dl>
+    </section>
+
+    <!-- ═══ 5. COMMANDER (animation A5, séance 3) ═══ -->
+    <section class="order" aria-labelledby="order-title">
+      <h2 id="order-title">Une envie de <strong>garba</strong> ? <em>On vous le prépare.</em></h2>
+      <a class="btn btn-light btn-lg" href="https://wa.me/2250576548868?text=Bonjour%20Succ%C3%A8s%20Garba%2C%20je%20voudrais%20commander%20un%20garba." target="_blank" rel="noopener">Commander sur WhatsApp</a>
+      <p class="order-phone">ou appeler le <a href="tel:+2250576548868">05 76 54 88 68</a></p>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p class="foot-concept"><strong>Concept</strong> de site réalisé par <a href="https://ferdinand-kouya.netlify.app" target="_blank" rel="noopener">Ferdinand Kouya</a>. Projet de démonstration, pas le site officiel de Succès Garba.</p>
+    <details class="credits">
+      <summary>Crédits photos</summary>
+      <ul>
+        <li>Plat du jour : Succès Garba</li>
+        <li>« Le garba », Cyriac Gbogou, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>, recadrée</li>
+        <li>« Un plat de garba 2 » et « Plat de poisson thon », Modjou, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, recadrées</li>
+        <li>« Attiéké en Côte d’Ivoire 01 », Kod B, CC BY-SA 4.0, recadrée</li>
+        <li>« Morceaux de thon frits », Zakalingba, CC BY-SA 4.0, recadrée</li>
+        <li>« Condiments clé du Gargba ivoirien 01 et 02 », BorisAhonon, CC BY-SA 4.0, recadrées</li>
+        <li>Toutes via <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. Détail dans <code>sources/credits.json</code>.</li>
+      </ul>
+    </details>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

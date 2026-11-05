@@ -1,0 +1,388 @@
+/* ═══════════════════════════════════════════════════════════
+   SUCCÈS GARBA — concept (séance 1 : structure, sans animation)
+   Inspiré de Balans Kitchen (Awwwards) : crème + nuit, accent piment,
+   sans-serif grasse collée à une italique serif fine.
+   Mobile d'abord : les règles « grand écran » sont tout en bas.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --creme: #efe8dd;       /* fond des sections claires */
+  --creme-2: #e4dacb;     /* blocs posés sur le crème */
+  --encre: #1f1a16;       /* texte sur fond clair */
+  --gris: #6b6159;        /* texte secondaire sur fond clair (5,4:1) */
+  --nuit: #15110e;        /* fond des sections sombres */
+  --lait: #f6f1ea;        /* texte sur fond sombre */
+  --piment: #c2410c;      /* accent, orange du piment (4,9:1 sur crème) */
+  --piment-fonce: #9a3412;
+
+  --sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --hero-h: max(80svh, 480px);  /* hauteur de l'accueil (le manifeste démarre dessous) */
+  --radius: 10px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  background: var(--creme);
+  color: var(--encre);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-underline-offset: 0.2em; }
+ol, ul { list-style: none; }
+h1, h2, h3 { font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance; }
+p { text-wrap: pretty; }
+:focus-visible { outline: 2px solid var(--piment); outline-offset: 3px; }
+
+/* La signature typographique : gras collé à une italique fine */
+h1 em, h2 em, .logo em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+h1 strong, h2 strong { font-weight: 800; }
+
+/* Petites étiquettes en capitales orange */
+.label {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--piment);
+}
+
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  background: var(--encre); color: var(--lait); padding: 10px 16px; border-radius: 6px;
+}
+.skip:focus { top: 12px; }
+
+/* ═══════════ BOUTONS ═══════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 22px;
+  border-radius: 6px;
+  font-weight: 600; font-size: 15px; text-decoration: none; white-space: nowrap;
+}
+.btn-piment { background: var(--piment); color: #fff; }
+.btn-outline { border: 1px solid rgba(246, 241, 234, 0.6); color: var(--lait); text-transform: uppercase; letter-spacing: 0.1em; font-size: 13px; }
+.btn-light { background: var(--lait); color: var(--encre); }
+.btn-sm { min-height: 40px; padding: 0 16px; font-size: 14px; }
+.btn-lg { min-height: 56px; padding: 0 30px; font-size: 17px; }
+
+/* ═══════════ BARRE DU HAUT ═══════════ */
+.bar {
+  position: fixed; top: 10px; left: 10px; right: 10px; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  height: 56px; padding: 0 8px 0 18px;
+  background: rgba(21, 17, 14, 0.92);
+  color: var(--lait);
+  border-radius: var(--radius);
+}
+.logo { font-size: 19px; font-weight: 800; text-decoration: none; letter-spacing: -0.02em; }
+.logo em { font-size: 1.15em; }
+.bar-nav { display: none; }
+
+/* ═══════════ 1. ÉCRAN PARTAGÉ (A1) ═══════════ */
+/* Les deux panneaux sont EMPILÉS, chacun en plein écran. Celui de droite est
+   au-dessus et découpé par clip-path. La position de la découpe est rangée
+   dans la variable --split : GSAP n'anime que cette variable, jamais une
+   largeur, donc aucun recalcul de mise en page (fluide sur petit téléphone).
+   Téléphone : découpe horizontale (photo du haut / photo du bas).
+   svh = hauteur visible, sans la barre d'adresse du navigateur mobile. */
+.split {
+  --split: 50%;
+  position: relative;
+  height: var(--hero-h);
+  background: var(--nuit);
+  overflow: hidden;
+}
+.split-panel {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.split-panel[data-split="droite"] { clip-path: inset(var(--split) 0 0 0); }
+/* Chaque photo ne prend que la place qu'elle peut montrer au maximum (64 %,
+   l'ouverture maximale au survol), pas tout l'écran : sinon une photo de
+   486 px de large était agrandie 3 fois et paraissait trop zoomée.
+   Téléphone : la photo du haut occupe 64 % de la hauteur, celle du bas
+   100 % (elle finit par tout recouvrir au défilement). */
+.split-panel img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.split-panel[data-split="gauche"] img { bottom: auto; height: 64%; }
+.split-panel figcaption {
+  position: absolute; left: 0; right: 0; top: 84px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--lait); text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+.split-panel figcaption em { font-family: var(--serif); font-size: 19px; font-weight: 300; }
+.split-panel figcaption span { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; }
+
+/* bandeau du bas : titre + bouton, posé sur les photos */
+.split-foot {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 48px var(--gutter) 20px;
+  background: linear-gradient(transparent, rgba(21, 17, 14, 0.9));
+  color: var(--lait);
+}
+.split-title { font-size: clamp(28px, 7vw, 48px); font-weight: 800; }
+.split-title em { display: block; }
+/* la légende du panneau du bas suit la découpe */
+.split-panel[data-split="droite"] figcaption { top: calc(var(--split) + 14px); }
+
+/* ═══════════ 2. MANIFESTE : l'effet « rideau » (A3) ═══════════ */
+/* Le principe, en CSS pur :
+   1. le manifeste remonte SOUS l'accueil (margin-top négatif) ;
+   2. son contenu est collé en haut de l'écran (position: sticky) ;
+   3. l'accueil, au-dessus (z-index 2), remonte et le découvre ;
+   4. la section des étapes, au-dessus aussi, glisse par-dessus.
+   La hauteur de 300svh donne : 1 écran découvert, 1 écran affiché, 1 écran recouvert.
+   Attention : pas d'overflow: hidden sur .manifesto, sinon sticky ne marche plus. */
+.split { z-index: 2; }
+.manifesto {
+  position: relative; z-index: 1;
+  /* Depuis le 2026-11-05, la vidéo est l'accueil : plus de marge négative. */
+  height: 200svh;
+  background: var(--nuit); color: var(--lait);
+  text-align: center;
+  /* Quand la vidéo démarre, Chrome croyait que le contenu avait bougé et
+     « corrigeait » la position de la page (elle remontait de 250 px).
+     On exclut cette section de l'ancrage du défilement. */
+  overflow-anchor: none;
+}
+.manifesto-sticky {
+  position: sticky; top: 0;
+  height: 100svh; overflow: hidden;
+  display: grid; place-items: center;
+}
+.manifesto-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0.35;
+}
+.manifesto-inner { position: relative; padding: 96px var(--gutter); max-width: 900px; }
+.monogram {
+  display: block;
+  font-size: clamp(96px, 22vw, 200px); font-weight: 800; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(246, 241, 234, 0.7);
+  letter-spacing: -0.04em;
+}
+.manifesto .label { margin-top: 28px; }
+.manifesto-title { margin-top: 12px; font-size: clamp(38px, 8vw, 84px); }
+.manifesto hr { margin: 28px auto; width: min(100%, 520px); border: 0; border-top: 1px solid rgba(246, 241, 234, 0.35); transform-origin: center; }
+
+/* ═══════════ 3. L'ASSIETTE EN SIX ÉTAPES (A2) ═══════════ */
+/* Comme chez Balans : en-tête (titre + onglets) collé en haut, assiette collée
+   à gauche, texte qui défile à droite. Tout en position: sticky.
+   --barre : hauteur de la barre fixe ; --tete : hauteur de l'en-tête collé
+   (valeur approchée ici, app.js la mesure pour être exact). */
+.steps {
+  --barre: 66px;
+  --tete: 118px;
+  position: relative; z-index: 2;
+  margin-top: -100svh;                 /* glisse par-dessus le manifeste */
+  background: var(--creme);
+  padding: 0 var(--gutter) 96px;
+  /* Les fondus ci-dessous débordent sur les côtés (left/right: -100vmax).
+     Sur téléphone, un débordement horizontal fait DÉZOOMER toute la page
+     (la fenêtre « croyait » faire 2622 px de haut au lieu de 860).
+     overflow: clip coupe ce qui dépasse SANS casser position: sticky
+     (contrairement à overflow: hidden, qui l'empêcherait de fonctionner). */
+  overflow: clip;
+}
+.steps-head {
+  position: sticky; top: var(--barre); z-index: 3;
+  max-width: 1320px; margin: 0 auto;
+  padding: 18px 0 12px;
+}
+/* Fond crème sur toute la largeur de l'écran (pas seulement 1320 px).
+   Pseudo-élément étendu sur les CÔTÉS seulement. (Une ombre géante,
+   box-shadow 100vmax, déborde aussi vers le bas et recouvrait le haut du
+   cercle.) Ce qui dépasse de la section est coupé par overflow: clip. */
+.steps-head::before,
+.plate-col::before {
+  content: ""; position: absolute; z-index: -1;
+  top: 0; bottom: 0; left: -100vmax; right: -100vmax;
+  background: var(--creme);
+}
+/* le fond de l'en-tête remonte aussi jusqu'en haut de l'écran, derrière la
+   barre flottante : sinon le texte qui défile réapparaît autour de la barre */
+.steps-head::before { top: calc(-1 * var(--barre)); }
+/* le texte qui passe sous l'en-tête s'estompe (comme le flou de Balans) */
+.steps-head::after {
+  content: ""; position: absolute; left: -100vmax; right: -100vmax; top: 100%;
+  height: 20px; pointer-events: none;                 /* 48px sur grand écran */
+  background: linear-gradient(var(--creme), rgba(239, 232, 221, 0));
+}
+.steps-head h2 { font-size: clamp(28px, 7vw, 64px); }
+.steps-head .label { margin-top: 6px; }
+.steps-tabs { display: none; }          /* onglets : sur grand écran seulement */
+
+.steps-body { max-width: 1320px; margin: 0 auto; display: grid; }
+
+/* téléphone : l'assiette est collée sous l'en-tête, le texte défile dessous */
+.plate-col {
+  position: sticky; top: calc(var(--barre) + var(--tete)); z-index: 2;
+  padding: 24px 0 14px;               /* les points du haut restent hors du fondu de l'en-tête */
+}
+.plate-col::after {
+  content: ""; position: absolute; left: -100vmax; right: -100vmax; top: 100%;
+  height: 40px; pointer-events: none;
+  background: linear-gradient(var(--creme), rgba(239, 232, 221, 0));
+}
+.plate { position: relative; width: min(58vw, 32svh); margin: 0 auto; aspect-ratio: 1; }
+.plate img {
+  position: absolute; inset: 9%;
+  width: 82%; height: 82%; object-fit: cover;
+  border-radius: 50%;
+}
+.plate-ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ring-track { fill: none; stroke: rgba(31, 26, 22, 0.18); stroke-width: 0.5; }
+/* l'arc orange : pathLength="1" fait que le tour complet vaut 1.
+   stroke-dashoffset: 1 = arc invisible ; 0 = tour complet. Un cercle SVG
+   commence à droite (3 h) et tourne dans le sens des aiguilles : exactement
+   comme Balans, pas besoin de rotation. app.js le fait avancer de 0 à 5/6. */
+.ring-progress {
+  fill: none; stroke: var(--piment); stroke-width: 1.3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+/* Numéros dans des ronds, comme Balans :
+   - pas encore atteint : petit rond beige plein, liseré fin, numéro gris ;
+   - atteint : gros rond orange (presque 2 fois plus grand), liseré clair, numéro blanc.
+   r (le rayon) est une propriété CSS en SVG 2 : on peut donc l'animer en transition.
+   dominant-baseline: central centre le numéro verticalement dans son rond. */
+.ring-dots circle {
+  r: 3.3;
+  fill: var(--creme-2); stroke: rgba(31, 26, 22, 0.28); stroke-width: 0.35;
+  transition: r .4s cubic-bezier(.2, .8, .2, 1), fill .3s, stroke .3s;
+}
+.ring-dots text {
+  font: 600 2.6px var(--sans); fill: var(--gris);
+  text-anchor: middle; dominant-baseline: central;
+  transition: fill .3s, font-size .4s cubic-bezier(.2, .8, .2, 1);
+}
+.ring-dots .is-active circle { r: 6; fill: var(--piment); stroke: #f2c4ad; stroke-width: 0.7; }
+.ring-dots .is-active text { fill: #fff; font-size: 4.6px; }
+
+.steps-list { display: grid; }
+.step {
+  min-height: 55svh;
+  padding: 22px 0 40px;
+  border-top: 1px solid rgba(31, 26, 22, 0.15);
+  scroll-margin-top: calc(var(--barre) + var(--tete) + 20px);
+}
+/* la dernière étape occupe tout l'espace visible : l'assiette reste collée
+   (et l'arc visible jusqu'au point 6) pendant qu'on lit l'étape 6 */
+.step:last-child { min-height: calc(100svh - var(--barre) - var(--tete)); }
+.step h3 { margin-top: 6px; font-size: 28px; font-weight: 800; }
+.step p:not(.label) { margin-top: 8px; color: var(--gris); max-width: 46ch; }
+.step img { margin-top: 16px; width: 100%; aspect-ratio: 4 / 3; max-height: 30svh; object-fit: cover; border-radius: 6px; }
+
+/* ═══════════ 4. OÙ NOUS TROUVER ═══════════ */
+.where {
+  padding: 88px var(--gutter);
+  background: var(--creme-2);
+}
+.where h2 { font-size: clamp(40px, 8vw, 80px); font-weight: 800; }
+.where-address { margin-top: 18px; max-width: 32ch; font-size: clamp(19px, 2.4vw, 26px); }
+
+.facts { margin-top: 32px; max-width: 520px; }
+.facts > div {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding: 12px 0; border-top: 1px solid rgba(31, 26, 22, 0.18);
+}
+.facts > div:last-child { border-bottom: 1px solid rgba(31, 26, 22, 0.18); }
+.facts dt { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gris); }
+.tbc { color: var(--gris); font-style: italic; text-decoration: underline dashed; text-underline-offset: 0.25em; }
+
+/* ═══════════ 5. COMMANDER ═══════════ */
+.order {
+  padding: 96px var(--gutter);
+  background: var(--piment); color: #fff;
+  text-align: center;
+}
+.order h2 { font-size: clamp(36px, 7vw, 76px); max-width: 16ch; margin: 0 auto 36px; }
+.order h2 em { display: block; }
+.order-phone { margin-top: 16px; }
+
+/* ═══════════ PIED DE PAGE ═══════════ */
+.foot {
+  padding: 32px var(--gutter) 40px;
+  background: var(--nuit); color: rgba(246, 241, 234, 0.75);
+  font-size: 14px;
+}
+.foot a { color: var(--lait); }
+.credits { margin-top: 16px; }
+.credits summary { cursor: pointer; color: var(--lait); }
+.credits ul { margin-top: 10px; display: grid; gap: 4px; font-size: 13px; }
+
+/* ═══════════ GRAND ÉCRAN ═══════════ */
+@media (min-width: 900px) {
+  body { font-size: 17px; }
+
+  .bar { left: 20px; right: 20px; top: 16px; padding: 0 8px 0 24px; }
+  .bar-nav { display: flex; gap: 28px; margin-left: auto; margin-right: 12px; font-size: 14px; }
+  .bar-nav a { text-decoration: none; opacity: 0.8; }
+
+  /* ordinateur : découpe verticale, chaque légende reste centrée dans sa moitié visible */
+  .split-panel[data-split="droite"] { clip-path: inset(0 0 0 var(--split)); }
+  .split-panel[data-split="gauche"] img { bottom: 0; height: 100%; right: auto; width: 64%; }
+  .split-panel[data-split="droite"] img { left: auto; width: 64%; }
+  .split-panel figcaption { top: 96px; }
+  .split-panel[data-split="gauche"] figcaption { right: auto; width: var(--split); }
+  .split-panel[data-split="droite"] figcaption { top: 96px; left: var(--split); }
+  .split-foot { flex-direction: row; align-items: flex-end; justify-content: space-between; padding-bottom: 32px; }
+  .split-title { max-width: 18ch; }
+
+  .steps { --barre: 72px; --tete: 190px; }
+  .steps-head::after { height: 48px; }
+  .steps-tabs {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    margin-top: 22px;
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+    text-align: center;
+  }
+  .steps-tabs a { padding: 10px 6px; color: var(--piment); text-decoration: none; transition: background-color .3s, color .3s; }
+  .steps-tabs a.is-active { background: var(--creme-2); color: var(--encre); }
+
+  .steps-body { grid-template-columns: 5fr 6fr; gap: 64px; align-items: start; }
+  /* ordinateur : l'assiette reste centrée dans l'espace sous l'en-tête */
+  .plate-col {
+    height: calc(100svh - var(--barre) - var(--tete));
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 0 32px;
+  }
+  .plate-col::before, .plate-col::after { display: none; }
+  .plate { width: min(100%, calc(100svh - var(--barre) - var(--tete) - 64px)); }
+  .step { min-height: 70svh; padding-top: 28px; }
+  .step h3 { font-size: 34px; }
+  .step img { max-height: 42svh; }
+
+  .where { display: grid; grid-template-columns: 1fr 1fr; gap: 0 64px; align-items: end; }
+  .where .facts { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MICRO-INTERACTIONS ET MOUVEMENT RÉDUIT
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── A5 : micro-interactions des boutons (CSS seul) ─── */
+.btn { transition: transform .2s cubic-bezier(.2, .8, .2, 1), background-color .2s, color .2s; }
+.btn:active { transform: scale(.96); }
+.btn-piment:hover { background: var(--piment-fonce); }
+.btn-outline:hover { background: var(--lait); color: var(--encre); }
+.btn-light::after { content: "→"; margin-left: 10px; transition: transform .25s cubic-bezier(.2, .8, .2, 1); }
+.btn-light:hover::after { transform: translateX(5px); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .btn-light::after { transition: none; }
+}
