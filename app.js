@@ -214,9 +214,13 @@ function bonDeCommande() {
     const p = montant(poisson);
     if (a < 100) { erreur.textContent = 'L’attiéké commence à 100 FCFA.'; attieke.focus(); return; }
     if (p < 200) { erreur.textContent = 'Le poisson commence à 200 FCFA.'; poisson.focus(); return; }
+    // À emporter ou sur place : le vendeur doit savoir comment préparer la commande
+    const mode = form.elements.mode.value;
+    if (!mode) { erreur.textContent = 'Choisissez « À emporter » ou « Sur place ».'; form.elements.mode[0].focus(); return; }
 
     const lignes = [
-      'Bonjour Succès Garba, je voudrais commander un garba :',
+      `Bonjour Succès Garba, je voudrais commander un garba (${mode.toLowerCase()}) :`,
+      `- Mode : ${mode}`,
       `- Attiéké : ${fcfa(a)}`,
       `- Poisson : ${fcfa(p)}`,
       `Total : ${fcfa(a + p)}`,
