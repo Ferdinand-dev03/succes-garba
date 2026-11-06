@@ -249,7 +249,7 @@ h1 strong, h2 strong { font-weight: 800; }
 /* l'arc orange : pathLength="1" fait que le tour complet vaut 1.
    stroke-dashoffset: 1 = arc invisible ; 0 = tour complet. Un cercle SVG
    commence à droite (3 h) et tourne dans le sens des aiguilles : exactement
-   comme Balans, pas besoin de rotation. app.js le fait avancer de 0 à 5/6. */
+   comme Balans, pas besoin de rotation. app.js le fait avancer de 0 à 4/5. */
 .ring-progress {
   fill: none; stroke: var(--piment); stroke-width: 1.3; stroke-linecap: round;
   stroke-dasharray: 1; stroke-dashoffset: 1;
@@ -285,6 +285,8 @@ h1 strong, h2 strong { font-weight: 800; }
 .step h3 { margin-top: 6px; font-size: 28px; font-weight: 800; }
 .step p:not(.label) { margin-top: 8px; color: var(--gris); max-width: 46ch; }
 .step img { margin-top: 16px; width: 100%; aspect-ratio: 4 / 3; max-height: 30svh; object-fit: cover; border-radius: 6px; }
+/* Étape « Servi chaud » : le plat détouré du cercle, entier et sans fond */
+.step img.step-plat { object-fit: contain; border-radius: 0; }
 
 /* ═══════════ 4. OÙ NOUS TROUVER ═══════════ */
 .where {
@@ -389,7 +391,7 @@ h1 strong, h2 strong { font-weight: 800; }
   .steps { --barre: 72px; --tete: 190px; }
   .steps-head::after { height: 48px; }
   .steps-tabs {
-    display: grid; grid-template-columns: repeat(6, 1fr);
+    display: grid; grid-template-columns: repeat(5, 1fr);
     margin-top: 22px;
     font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
     text-align: center;

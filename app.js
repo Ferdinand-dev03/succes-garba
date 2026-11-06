@@ -71,12 +71,12 @@ function manifeste() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   A2. LE CERCLE DES SIX ÉTAPES (comme Balans)
+   A2. LE CERCLE DES CINQ ÉTAPES (comme Balans)
    L'assiette reste collée (CSS sticky), le texte défile librement.
    On trace une « ligne de lecture » à 60 % de la hauteur de l'écran :
    - l'étape dont le haut a franchi cette ligne devient l'étape courante ;
    - entre deux étapes, l'arc avance en proportion du chemin parcouru ;
-   - l'arc va du point 1 (3 h) au point 6 : 5/6 du tour au maximum ;
+   - l'arc va du point 1 (3 h) au point 5 : 4/5 du tour au maximum ;
    - chaque point atteint grossit et passe à l'orange (CSS, classe is-active).
    ───────────────────────────────────────────────────────────── */
 function cercleDesEtapes() {
@@ -88,7 +88,7 @@ function cercleDesEtapes() {
   const points = [...section.querySelectorAll('.ring-dots g')];
   const onglets = [...section.querySelectorAll('.steps-tabs a')];
   const arc = section.querySelector('.ring-progress');
-  const nb = etapes.length;                                     // 6
+  const nb = etapes.length;                                     // 5
 
   // Hauteur exacte de l'en-tête collé, pour placer l'assiette juste dessous.
   const mesurer = () => section.style.setProperty('--tete', tete.offsetHeight + 'px');
@@ -109,14 +109,14 @@ function cercleDesEtapes() {
     const ligne = window.innerHeight * 0.6;
     const hauts = etapes.map((el) => el.getBoundingClientRect().top);
 
-    let k = 0;                                                  // étape courante (0 à 5)
+    let k = 0;                                                  // étape courante (0 à 4)
     hauts.forEach((h, i) => { if (h <= ligne) k = i; });
     let f = 0;                                                  // avancée vers l'étape suivante (0 à 1)
     if (k < nb - 1 && hauts[k] <= ligne) {
       f = gsap.utils.clamp(0, 1, (ligne - hauts[k]) / (hauts[k + 1] - hauts[k]));
     }
 
-    arcVers(1 - (k + f) / nb);                                  // 1 = invisible, 1/6 = point 6 atteint
+    arcVers(1 - (k + f) / nb);                                  // 1 = invisible, 1/5 = point 5 atteint
 
     if (k !== courante) {
       courante = k;
