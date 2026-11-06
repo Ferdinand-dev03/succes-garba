@@ -144,7 +144,46 @@
     <!-- ═══ 5. COMMANDER (animation A5, séance 3) ═══ -->
     <section class="order" aria-labelledby="order-title">
       <h2 id="order-title">Une envie de <strong>garba</strong> ? <em>On vous le prépare.</em></h2>
-      <a class="btn btn-light btn-lg" href="https://wa.me/2250576548868?text=Bonjour%20Succ%C3%A8s%20Garba%2C%20je%20voudrais%20commander%20un%20garba." target="_blank" rel="noopener">Commander sur WhatsApp</a>
+
+      <!-- Bon de commande : le client choisit le montant de son attiéké et de son poisson,
+           le total se calcule seul, la commande part sur WhatsApp avec un message déjà écrit. -->
+      <form class="order-form" id="commande" novalidate>
+        <div class="order-field">
+          <label for="prix-attieke">Attiéké <span>à partir de 100 F</span></label>
+          <div class="order-input">
+            <input id="prix-attieke" name="attieke" type="number" inputmode="numeric" min="100" step="50" value="100" required>
+            <span>FCFA</span>
+          </div>
+          <div class="order-chips" data-for="prix-attieke">
+            <button type="button">100</button><button type="button">200</button><button type="button">300</button><button type="button">500</button>
+          </div>
+        </div>
+
+        <div class="order-field">
+          <label for="prix-poisson">Poisson <span>à partir de 200 F</span></label>
+          <div class="order-input">
+            <input id="prix-poisson" name="poisson" type="number" inputmode="numeric" min="200" step="50" value="200" required>
+            <span>FCFA</span>
+          </div>
+          <div class="order-chips" data-for="prix-poisson">
+            <button type="button">200</button><button type="button">300</button><button type="button">500</button><button type="button">1000</button>
+          </div>
+        </div>
+
+        <div class="order-field order-field-wide">
+          <label for="message">Autre chose ? <span>facultatif</span></label>
+          <textarea id="message" name="message" rows="3" placeholder="Ex. : beaucoup de piment, sans oignon, deux œufs, je passe à 12 h…"></textarea>
+        </div>
+
+        <div class="order-total order-field-wide">
+          <span>Total</span>
+          <strong id="total-commande">300 FCFA</strong>
+        </div>
+        <p class="order-error order-field-wide" id="erreur-commande" role="alert"></p>
+
+        <button class="btn btn-light btn-lg order-field-wide" type="submit">Commander sur WhatsApp</button>
+      </form>
+
       <p class="order-phone">ou appeler le <a href="tel:+2250576548868">05 76 54 88 68</a></p>
     </section>
 

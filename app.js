@@ -13,6 +13,9 @@
    - si ce fichier ne charge pas, la page reste entièrement lisible.
    ═══════════════════════════════════════════════════════════ */
 
+// Le bon de commande passe en premier : il doit marcher même si GSAP ne charge pas.
+bonDeCommande();
+
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 // L'arc du cercle et l'en-tête collé fonctionnent même en mouvement réduit :
@@ -159,5 +162,67 @@ function revelerTitres() {
   gsap.from('.order .btn', {
     scale: 0.8, opacity: 0, duration: 0.8, ease: 'back.out(2)',
     scrollTrigger: { trigger: '.order', start: 'top 70%' },
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LE BON DE COMMANDE
+   Le client choisit le montant de son attiéké (100 F minimum) et de son
+   poisson (200 F minimum), ajoute un message s'il veut. Le total se
+   calcule seul et la commande part sur le WhatsApp de Succès Garba.
+   ───────────────────────────────────────────────────────────── */
+function bonDeCommande() {
+  const form = document.getElementById('commande');
+  if (!form) return;
+
+  const WHATSAPP = '2250576548868';
+  const attieke = form.elements.attieke;
+  const poisson = form.elements.poisson;
+  const message = form.elements.message;
+  const total = document.getElementById('total-commande');
+  const erreur = document.getElementById('erreur-commande');
+  const fcfa = (n) => n.toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' ') + ' FCFA';
+  const montant = (champ) => parseInt(champ.value, 10) || 0;
+
+  // Les pastilles (100, 200, 300…) remplissent le champ d'un clic
+  form.querySelectorAll('.order-chips').forEach((groupe) => {
+    const champ = document.getElementById(groupe.dataset.for);
+    groupe.querySelectorAll('button').forEach((bouton) => {
+      bouton.addEventListener('click', () => {
+        champ.value = bouton.textContent;
+        mettreAJour();
+      });
+    });
+  });
+
+  function mettreAJour() {
+    total.textContent = fcfa(montant(attieke) + montant(poisson));
+    form.querySelectorAll('.order-chips').forEach((groupe) => {
+      const valeur = document.getElementById(groupe.dataset.for).value;
+      groupe.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.textContent === valeur)));
+    });
+    erreur.textContent = '';
+  }
+
+  attieke.addEventListener('input', mettreAJour);
+  poisson.addEventListener('input', mettreAJour);
+  mettreAJour();
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const a = montant(attieke);
+    const p = montant(poisson);
+    if (a < 100) { erreur.textContent = 'L’attiéké commence à 100 FCFA.'; attieke.focus(); return; }
+    if (p < 200) { erreur.textContent = 'Le poisson commence à 200 FCFA.'; poisson.focus(); return; }
+
+    const lignes = [
+      'Bonjour Succès Garba, je voudrais commander un garba :',
+      `- Attiéké : ${fcfa(a)}`,
+      `- Poisson : ${fcfa(p)}`,
+      `Total : ${fcfa(a + p)}`,
+    ];
+    if (message.value.trim()) lignes.push('', `Message : ${message.value.trim()}`);
+
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(lignes.join('\n'))}`, '_blank', 'noopener');
   });
 }
