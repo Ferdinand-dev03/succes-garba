@@ -1,7 +1,7 @@
-# Succès Garba (concept)
+# Succès Garba
 
-Site concept animé (GSAP, ScrollTrigger, SplitText) réalisé par Ferdinand Kouya pour son portfolio. Projet de démonstration, pas le site officiel de Succès Garba.
+Site de Succès Garba, Quartier Municipal, Bouaké : attiéké, poisson frit, piment frais. Ouvert de 8 h 00 à 15 h 30, commande sur WhatsApp.
 
 En ligne : https://ferdinand-dev03.github.io/succes-garba/
 
-Crédits photos : voir le pied de page du site.
+Site réalisé par Ferdinand Kouya. Crédits photos : voir le pied de page du site.
