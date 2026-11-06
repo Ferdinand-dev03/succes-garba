@@ -286,7 +286,14 @@ h1 strong, h2 strong { font-weight: 800; }
 .step p:not(.label) { margin-top: 8px; color: var(--gris); max-width: 46ch; }
 .step img { margin-top: 16px; width: 100%; aspect-ratio: 4 / 3; max-height: 30svh; object-fit: cover; border-radius: 6px; }
 /* Étape « Servi chaud » : le plat détouré du cercle, entier et sans fond */
-.step img.step-plat { object-fit: contain; border-radius: 0; }
+.step img.step-plat { object-fit: contain; border-radius: 0; aspect-ratio: 1; height: auto; max-height: 70svh; }
+
+/* Téléphone : la dernière étape n'a plus besoin d'un écran entier de hauteur,
+   sinon un grand vide apparaît avant « Où nous trouver » (2026-11-06). */
+@media (max-width: 899px) {
+  .steps { padding-bottom: 24px; }
+  .step:last-child { min-height: 0; padding-bottom: 8px; }
+}
 
 /* ═══════════ 4. OÙ NOUS TROUVER ═══════════ */
 .where {
